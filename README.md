@@ -27,8 +27,6 @@ This project uses LangChain to manage document loading, chunking, semantic searc
 
 ---
 
----
-
 ## How It Works
 
 1. **Document Loading**  
