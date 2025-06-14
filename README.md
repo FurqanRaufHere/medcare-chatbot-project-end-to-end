@@ -8,7 +8,7 @@ This project uses LangChain to manage document loading, chunking, semantic searc
 
 ## Features
 
-- RAG architecture using LangChain and Gemini 2.0 Flash
+- RAG architecture using LangChain
 - Semantic search over embedded medical documents using Pinecone
 - Modular codebase structured across `src/`, `Data/`, and `research/` directories
 - Streamlined PDF ingestion, vector storage, and question answering
@@ -21,7 +21,7 @@ This project uses LangChain to manage document loading, chunking, semantic searc
 - Python
 - LangChain
 - Pinecone (vector DB)
-- Gemini 2.0 Flash (Google Generative AI)
+
 - Streamlit (for UI)
 - PyPDF2, tiktoken, python-dotenv
 
