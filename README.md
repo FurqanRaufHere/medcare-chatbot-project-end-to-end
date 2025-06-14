@@ -49,6 +49,6 @@ This project uses LangChain to manage document loading, chunking, semantic searc
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/medcare-chatbot.git
+git clone https://github.com/FurqanRaufHere/medcare-chatbot-project-end-to-end.git
 cd medcare-chatbot
 
