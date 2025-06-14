@@ -10,3 +10,5 @@ langchainhub
 openai
 -e .
 langchain_experimental
+gunicorn
+transformers
