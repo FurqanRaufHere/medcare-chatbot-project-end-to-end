@@ -8,6 +8,17 @@ from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 from src.prompt import *
 import os
+from flask import Flask, request, jsonify
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
+from collections import defaultdict
+
+# Keep memory per user session
+memory_sessions = defaultdict(lambda: ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
+))
+
 
 app = Flask(__name__)
 
@@ -44,6 +55,9 @@ prompt = ChatPromptTemplate.from_messages(
 question_answer_chain = create_stuff_documents_chain(llm, prompt)
 rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
+
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -53,9 +67,48 @@ def chat():
     msg = request.args.get("msg")
     input = msg
     print(input)
-    response = rag_chain.invoke({"input": msg})
+
+    session_id = request.args.get("session_id", "default")
+    is_new_chat = request.args.get("new_chat", "false").lower() == "true"
+
+    if is_new_chat and session_id in memory_sessions:
+        memory_sessions[session_id].clear()
+
+    # Provide a default Main Topic Title for the prompt template
+    main_topic_title = "Medical Query"
+    response = rag_chain.invoke({"input": msg, "Main Topic Title": main_topic_title})
     print("Response:", response["answer"])
     return str(response["answer"])
+
+# @app.route('/get', methods=["GET", "POST"])
+# def chat():
+#     try:
+#         msg = request.args.get("msg")
+#         session_id = request.args.get("session_id", "default")
+#         main_topic_title = "Medical Query"
+
+#         # Get or create memory for this session
+#         memory = memory_sessions[session_id]
+
+#         # Rebuild the memory-aware RAG chain
+#         rag_chain = ConversationalRetrievalChain(
+#             retriever=retriever,
+#             memory=memory,
+#             llm=llm
+#         )
+
+#         # Run the chain with memory support
+#         response = rag_chain.invoke({
+#             "input": msg,
+#             "Main Topic Title": main_topic_title
+#         })
+
+#         print(f"[{session_id}] Input: {msg}")
+#         print(f"[{session_id}] Response: {response['answer']}")
+#         return str(response["answer"])
+#     except Exception as e:
+#         print(f"Error in /get endpoint: {e}")
+#         return f"Error processing request: {e}", 500
 
 
 if __name__ == '__main__':
