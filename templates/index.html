@@ -63,7 +63,9 @@
     function startNewChat() {
       sessionId = "session-" + Date.now();
       document.getElementById('chatMessages').innerHTML = '';
-      fetch(`/get?msg=Hello&session_id=${sessionId}&new_chat=true`);
+      // fetch(`/get?msg=Hello&session_id=${sessionId}&new_chat=true`);
+      fetch(`https://medchat-chatbot.onrender.com/get?msg=Hello&session_id=${sessionId}&new_chat=true`);
+
     }
 
     class MediChat {
@@ -117,7 +119,7 @@
       async getBotResponse(message) {
         this.showTypingIndicator();
         try {
-          const res = await fetch(`/get?msg=${encodeURIComponent(message)}&session_id=${sessionId}`);
+          const res = await  fetch(`https://medchat-chatbot.onrender.com/get?msg=${encodeURIComponent(message)}&session_id=${sessionId}`);  //fetch(`/get?msg=${encodeURIComponent(message)}&session_id=${sessionId}`);
           const text = await res.text();
           this.hideTypingIndicator();
           this.addBotMessage(text);
